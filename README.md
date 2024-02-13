@@ -55,3 +55,5 @@ This tutorial just scratches the surface of what you can do with Terraform in Az
 ## Materials
 
 https://developer.hashicorp.com/terraform/tutorials/azure-get-started
+https://github.com/HoussemDellai/terraform-course/tree/main/14_arm_templates
+https://learn.microsoft.com/en-us/azure/developer/terraform/get-started-cloud-shell-bash?tabs=bash
