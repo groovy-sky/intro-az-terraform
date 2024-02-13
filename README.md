@@ -141,5 +141,15 @@ Once you have your configuration file ready, you can use the terraform init comm
 ## Materials
 
 https://developer.hashicorp.com/terraform/tutorials/azure-get-started
+
 https://github.com/HoussemDellai/terraform-course/tree/main/14_arm_templates
+
 https://learn.microsoft.com/en-us/azure/developer/terraform/get-started-cloud-shell-bash?tabs=bash
+
+https://github.com/Azure/terraform-azurerm-lz-vending
+
+https://github.com/thomast1906/terraform-on-azure/tree/main/4-terraform-advanced
+
+https://github.com/in4it/terraform-azure-course/blob/master/for-foreach/instance.tf
+
+https://github.com/hashicorp/terraform-provider-azurerm/blob/main/examples/web/static-site/main.tf
