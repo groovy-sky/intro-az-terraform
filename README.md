@@ -4,16 +4,73 @@ This tutorial provides a quick introduction to using Terraform to manage infrast
   
 ## Learning Plan  
   
-1. Introduction to Terraform  
+1. Overview
 2. Setting Up Terraform  
 3. Writing a Basic Terraform Configuration File  
 4. Deploying Resources in Azure with Terraform  
 5. Managing Changes with Terraform  
 6. Cleaning Up Resources  
   
-## 1. Introduction to Terraform  
-  
-Terraform is an open-source Infrastructure as Code (IaC) tool created by HashiCorp. It allows you to define and provision datacenter infrastructure using a declarative configuration language. Terraform supports a multitude of cloud service providers, including Microsoft Azure.  
+## 1. Overview
+
+Terraform is an open-source Infrastructure as Code (IaC) tool developed by HashiCorp. It uses a declarative configuration language to define and provide data center infrastructure.
+Infrastructure as Code (IaC)
+ 
+Infrastructure as Code (IaC) is the process of managing and provisioning computing infrastructure with machine-readable definition files, rather than physical hardware configuration or interactive configuration tools.
+Declarative Resource Deployment
+ 
+In a declarative approach to infrastructure management, like the one Terraform uses, you only need to specify what you want your infrastructure to look like and Terraform will figure out how to achieve that state.
+Terraform Workflow Stages
+ 
+The Terraform workflow has the following stages:
+* Write: You define resources, which may be across multiple cloud providers and services.
+* Plan: Terraform creates an execution plan describing the infrastructure it will create, update, or destroy based on the existing infrastructure and your configuration.
+* Apply: On approval, Terraform performs the proposed operations in the correct order, respecting any resource dependencies.
+
+### Terraform Components
+
+ 
+The main components of Terraform are:
+
+* Terraform Core: The primary component that reads configuration files and manages resources.
+* Terraform Providers: Plugins for each cloud provider (like Azure, AWS, GCP) that implement resource types.
+* Terraform CLI (Command Line Interface): The command line tool that interacts with Terraform Core and the Providers.
+
+### Terraform Commands Overview
+
+ 
+Terraform is operated via a command-line interface, and it has several different commands that allow you to interact with your infrastructure.
+Main Commands:
+```
+    init: Prepare your working directory for other commands
+    validate: Check whether the configuration is valid
+    plan: Show changes required by the current configuration
+    apply: Create or update infrastructure
+    destroy: Destroy previously-created infrastructure
+```
+All Other Commands:
+```
+    console: Try Terraform expressions at an interactive command prompt
+    fmt: Reformat your configuration in the standard style
+    force-unlock: Release a stuck lock on the current workspace
+    get: Install or upgrade remote Terraform modules
+    graph: Generate a Graphviz graph of the steps in an operation
+    import: Associate existing infrastructure with a Terraform resource
+    login: Obtain and save credentials for a remote host
+    logout: Remove locally-stored credentials for a remote host
+    metadata: Access metadata related commands
+    output: Show output values from your root module
+    providers: Show the providers required for this configuration
+    refresh: Update the state to match remote systems
+    show: Show the current state or a saved plan
+    state: Advanced state management
+    taint: Mark a resource instance as not fully functional
+    test: Execute integration tests for Terraform modules
+    untaint: Remove the 'tainted' state from a resource instance
+    version: Show the current Terraform version
+    workspace: Workspace management
+```
+
   
 ## 2. Setting Up Terraform  
   
