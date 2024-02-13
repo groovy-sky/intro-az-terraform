@@ -29,16 +29,39 @@ The Terraform workflow has the following stages:
 
 ### Terraform Components
 
- 
 The main components of Terraform are:
 
 * Terraform Core: The primary component that reads configuration files and manages resources.
-* Terraform Providers: Plugins for each cloud provider (like Azure, AWS, GCP) that implement resource types.
+* Terraform Providers/Plugins: Plugins for each cloud provider (like Azure, AWS, GCP) that implement resource types.
 * Terraform CLI (Command Line Interface): The command line tool that interacts with Terraform Core and the Providers.
 
-### Terraform Commands Overview
+#### Terraform Core
 
- 
+Terraform Core is a statically-compiled binary written in the Go programming language. The compiled binary is the command line tool (CLI) terraform, the entrypoint for anyone using 
+Terraform. The code source is available at github.com/hashicorp/terraform.
+
+The primary responsibilities of Terraform Core are:
+
+* Infrastructure as code: reading and interpolating configuration files and modules
+* Resource state management
+* Construction of the Resource Graph
+* Plan execution
+* Communication with plugins over RPC
+
+#### Terraform Providers/Plugins
+
+Terraform Plugins are written in Go and are executable binaries invoked by Terraform Core over RPC. Each plugin exposes an implementation for a specific service, such as AWS, or provisioner, such as bash. All Providers and Provisioners used in Terraform configurations are plugins. They are executed as a separate process and communicate with the main Terraform binary over an RPC interface. Terraform has several Provisioners built-in, while Providers are discovered dynamically as needed (See Discovery below). Terraform Core provides a high-level framework that abstracts away the details of plugin discovery and RPC communication so developers do not need to manage either.
+
+Terraform Plugins are responsible for the domain specific implementation of their type.
+The primary responsibilities of Provider Plugins are:
+
+* Initialization of any included libraries used to make API calls
+* Authentication with the Infrastructure Provider
+* Define managed resources and data sources that map to specific services
+* Define functions that enable or simplify computational logic for practitioner configurations
+
+#### Terraform CLI
+
 Terraform is operated via a command-line interface, and it has several different commands that allow you to interact with your infrastructure.
 Main Commands:
 ```
@@ -72,7 +95,20 @@ All Other Commands:
 ```
 
   
-## 2. Setting Up Terraform  
+## 2. Terraform on Azure
+
+Terraform plays well with Azure. It can manage a wide variety of Azure resources. To interact with the Azure services, Terraform uses the Azure provider plugin. This provider must be configured with valid Azure credentials before it can be used.
+
+There are several Terraform providers that enable the management of Azure infrastructure:
+
+- [AzureRM](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs): Manage stable Azure resources and functionality such as virtual machines, storage accounts, and networking interfaces.
+- [AzureAD](https://registry.terraform.io/providers/hashicorp/azuread/latest/docs): Manage Microsoft Entra resources such as groups, users, service principals, and applications.
+- [AzureDevops](https://registry.terraform.io/providers/microsoft/azuredevops/latest/docs): Manage Azure DevOps resources such as agents, repositories, projects, pipelines, and queries.
+- [AzAPI](https://registry.terraform.io/providers/Azure/azapi/latest/docs): Manage Azure resources and functionality using the Azure Resource Manager APIs directly. This provider compliments the AzureRM provider by enabling the management of Azure resources that aren't released. For more information about the AzAPI provider, see [Terraform AzAPI provider](overview-azapi-provider.md).
+- [AzureStack](https://registry.terraform.io/providers/hashicorp/azurestack/latest/docs): Manage Azure Stack Hub resources such as virtual machines, DNS, virtual networks, and storage.
+
+
+## 3. 
   
 Before you can use Terraform, you need to install it on your local machine. You can download Terraform from the [official website](https://www.terraform.io/downloads.html) and follow the [installation instructions](https://learn.hashicorp.com/tutorials/terraform/install-cli) for your specific operating system.  
   
