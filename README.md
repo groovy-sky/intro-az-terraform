@@ -108,6 +108,18 @@ There are several Terraform providers that enable the management of Azure infras
 - [AzureStack](https://registry.terraform.io/providers/hashicorp/azurestack/latest/docs): Manage Azure Stack Hub resources such as virtual machines, DNS, virtual networks, and storage.
 
 
+### AzureRM Provider
+
+The AzureRM provider is the primary and most commonly used Terraform provider for interacting with Azure resources. It has broad coverage of Azure services and is typically used for managing common infrastructure resources such as Virtual Machines, Networking resources, Storage accounts, and many more. It is officially supported and maintained by HashiCorp and Microsoft.
+
+### AzAPI Provider
+
+The AzAPI provider is used for direct interaction with Azure services via REST APIs. It's beneficial in situations where a specific Azure service or functionality is not yet supported by the AzureRM provider. It provides more flexibility but also requires a more in-depth understanding of Azure's REST APIs.
+
+### AzureRM vs AzAPI
+
+While the AzureRM provider is used for most Azure resource management tasks, the AzAPI provider can be used as a complementary tool for specific cases where direct API interactions are required or when a service or feature is not yet supported in the AzureRM provider.
+
 ## 3. 
   
 Before you can use Terraform, you need to install it on your local machine. You can download Terraform from the [official website](https://www.terraform.io/downloads.html) and follow the [installation instructions](https://learn.hashicorp.com/tutorials/terraform/install-cli) for your specific operating system.  
