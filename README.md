@@ -9,7 +9,17 @@ This tutorial offers a quick introduction to using Terraform, an open-source Inf
 - Install Terraform on your local machine.  
 - Create and deploy resources in Azure using Terraform.  
   
-## 1. How Terraform 
+# Table of Contents  
+  
+[1. Overview](#overview)  
+[2. Prerequisites](#prerequisites)  
+[3. First workflow](#first-workflow)  
+ [Terraform Modules](#terraform-modules)  
+ [Terraform Registry](#terraform-registry)  
+ [Terraform and Azure Example](#terraform-and-azure-example)  
+ [Conclusion](#conclusion)  
+
+## Overview
   
 Terraform, developed by HashiCorp, is an IaC tool that uses a declarative configuration language to define and provision data center infrastructure. It follows a declarative approach to infrastructure management, where you specify your desired infrastructure state, and Terraform figures out how to achieve it.  
   
@@ -29,78 +39,95 @@ Terraform primarily consists of:
 - **Terraform Providers/Plugins**: Implement resource types for each cloud provider (like Azure, AWS, GCP).  
 - **Terraform CLI (Command Line Interface)**: A command-line tool that interacts with Terraform Core and the Providers.  
   
-## 2. Using Terraform on Azure  
+### Azure and Terraform
   
 Terraform works seamlessly with Azure, managing a wide range of Azure resources. To interact with Azure services, Terraform uses the Azure provider plugin, which needs to be configured with valid Azure credentials.  
   
 There are several Terraform providers for managing Azure infrastructure, including [AzureRM](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs), [AzureAD](https://registry.terraform.io/providers/hashicorp/azuread/latest/docs), and [AzAPI](https://registry.terraform.io/providers/Azure/azapi/latest/docs).  
-  
-## 3. Installing Terraform  
-  
-To use Terraform, first, install it on your local machine. Download Terraform from the [official website](https://www.terraform.io/downloads.html) and follow the [installation instructions](https://learn.hashicorp.com/tutorials/terraform/install-cli) for your specific operating system.    
-  
-## 4. Creating Your First Terraform Configuration  
-  
-Terraform configuration files, written in a declarative language called HCL (HashiCorp Configuration Language), define your desired resources. Here's an example configuration file that creates an Azure Resource Group:    
-  
-```hcl    
-provider "azurerm" {    
-  version = "~>2.0"    
-  features {}    
-}    
-    
-resource "azurerm_resource_group" "example" {    
-  name     = "example-resources"    
-  location = "West Europe"    
-}    
-```
-## 5. Deploying Azure Resources with Terraform  
-  
-After preparing your configuration file, initialize your Terraform working directory with `terraform init`, review the planned changes with `terraform plan`, and apply the changes to create resources in Azure with `terraform apply`.  
 
-## 6. Organizing Your Terraform Environment  
+In this tutorial AzureRM and AzAPI providers will be used to demonstrate how to create and manage Azure resources with Terraform.
+
+## Prerequisites
+
+To follow this tutorial, you'll need the following:
+* An Azure account with an active subscription. If you don't have an account, you can create [a free account](https://azure.microsoft.com/en-us/free).
+* Installed Terraform. For running this tutorial [Azure Cloud Shell](https://learn.microsoft.com/en-us/azure/cloud-shell/get-started/new-storage) should be enough. If you want to install Terraform on your local machine, you can download it from the [official website](https://www.terraform.io/downloads.html). 
   
+
+### Credentials and Authentication
+
+Before you can start using Terraform with Azure, you need to authenticate with Azure. Terraform supports several methods for authenticating with Azure, including using the Azure CLI, a Service Principal, or Managed Service Identity (MSI). More about that you can find [here](https://learn.microsoft.com/en-us/azure/developer/terraform/authenticate-to-azure). If you are using Azure Cloud Shell, you can use the Azure CLI to authenticate with Azure.
+
+  
+## First workflow
+
+In this tutorial, you will create a Terraform configuration to deploy an Azure resource group. 
+
+Terraform configuration files, written in a declarative language called HCL (HashiCorp Configuration Language), define your desired resources. As a first step, you'll create a simple Terraform workflow, which deploys an Azure resource group using the AzureRM provider:
+
+```hcl  
+provider "azurerm" {  
+  features {}
+}  
+  
+resource "azurerm_resource_group" "first_resource_group" {  
+  name     = "example-resource-group"  
+  location = "West Europe"  
+}  
+```
+  
+
+### Resource Configuration
+
+In previous section you learned how to create and run a simple Terraform workflow, which deploys an Azure resource group. Now, let's discuss how to organize your Terraform environment effectively.  
+  
+In order to structure your Terraform configuration you can break it down into multiple files and introduce variables for more flexibility. Here is how you could potentially refactor your environment:
+
+First, define your provider in a separate file, say providers.tf:
+
+provider "azurerm" {    
+  features {}  
+}  
+
+Next, create a new file named variables.tf to define variables that can be passed to the configuration:
+
+variable "resource_group_name" {  
+  description = "The name of the resource group"  
+  type        = string  
+  default     = "example-resource-group"  
+}  
+  
+variable "location" {  
+  description = "The location of the resource group"  
+  type        = string  
+  default     = "West Europe"  
+}  
+ 
+Then, refactor your main.tf to use these variables:
+
+resource "azurerm_resource_group" "first_resource_group" {    
+  name     = var.resource_group_name   
+  location = var.location   
+}    
+
+ 
+Finally, you can define outputs in a separate file, say outputs.tf. Since your current configuration doesn't have any outputs, this file is optional. However, for future use, you may have something like:
+
+output "resource_group_id" {  
+  description = "The ID of the resource group"  
+  value       = azurerm_resource_group.first_resource_group.id  
+}  
+
+ 
+This way, your code is structured more neatly, is easier to maintain, and allows for more flexibility and reusability.  
+
+### Organizing Infrastructure with Terraform Modules  
+
 When working with Terraform, it's crucial to keep your environment organized. This involves managing your configuration files, state files, and modules effectively.  
   
 - **Configuration Files**: These are the files where you write your infrastructure code. It's a good practice to split your configuration into multiple files for better readability and maintainability.  
 - **State Files**: Terraform creates a state file after applying a configuration. This file helps Terraform track the resources it has created. You should manage your state files carefully and consider using remote state storage for collaboration and security.  
 - **Modules**: Modules are reusable, self-contained packages of Terraform configurations. Organizing your code into modules helps to keep your code DRY (Don't Repeat Yourself), making it more efficient and easier to manage.  
-  
-## 7. Creating Workflow Files using AzAPI and AzureRM  
-  
-You can use both AzAPI and AzureRM providers in your workflow files, depending on your needs. Here are two examples:  
-  
-### Example Using AzureRM Provider  
-  
-```hcl  
-provider "azurerm" {  
-  version = "=2.40.0"  
-  features {}  
-}  
-  
-resource "azurerm_resource_group" "rg" {  
-  name     = "example-resources"  
-  location = "West Europe"  
-}  
-```
-
-### Example Using AzAPI Provider
-```hc1
-provider "azapi" {  
-  version = "=0.1.0"  
-}  
-  
-resource "azapi_virtual_network" "vnet" {  
-  name                = "example-vnet"  
-  resource_group_name = azurerm_resource_group.rg.name  
-  location            = azurerm_resource_group.rg.location  
-  address_space       = ["10.0.0.0/16"]  
-}  
-```
-  
-Remember, using both providers might need additional setup for authenticating each one. Also, the AzAPI provider requires a deeper understanding of Azure's REST APIs, so it's recommended for advanced use-cases.  
-
-## 8. Organizing Infrastructure with Terraform Modules  
   
 In Terraform, a module is a container for multiple resources that are used together. Modules allow you to encapsulate a set of resources and operations into a reusable package. This can be used in different parts of your Terraform environment or even shared across multiple configurations.  
   
