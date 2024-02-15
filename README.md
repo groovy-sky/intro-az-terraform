@@ -61,6 +61,8 @@ Before you can start using Terraform with Azure, you need to authenticate with A
   
 ## First workflow
 
+### Initial Configuration
+
 In this tutorial, you will create a Terraform configuration to deploy an Azure resource group. 
 
 Terraform configuration files, written in a declarative language called HCL (HashiCorp Configuration Language), define your desired resources. As a first step, you'll create a simple Terraform workflow, which deploys an Azure resource group using the AzureRM provider:
@@ -75,9 +77,8 @@ resource "azurerm_resource_group" "first_resource_group" {
   location = "West Europe"  
 }  
 ```
-  
 
-### Resource Configuration
+### Structuring Configuration
 
 In previous section you learned how to create and run a simple Terraform workflow, which deploys an Azure resource group. Now, let's discuss how to organize your Terraform environment effectively.  
   
@@ -85,12 +86,15 @@ In order to structure your Terraform configuration you can break it down into mu
 
 First, define your provider in a separate file, say providers.tf:
 
+```hcl
 provider "azurerm" {    
   features {}  
 }  
+```
 
 Next, create a new file named variables.tf to define variables that can be passed to the configuration:
 
+```hcl
 variable "resource_group_name" {  
   description = "The name of the resource group"  
   type        = string  
@@ -102,24 +106,47 @@ variable "location" {
   type        = string  
   default     = "West Europe"  
 }  
- 
+```
+
 Then, refactor your main.tf to use these variables:
 
+```hcl
 resource "azurerm_resource_group" "first_resource_group" {    
   name     = var.resource_group_name   
   location = var.location   
 }    
-
+```
  
 Finally, you can define outputs in a separate file, say outputs.tf. Since your current configuration doesn't have any outputs, this file is optional. However, for future use, you may have something like:
 
+```hcl
 output "resource_group_id" {  
   description = "The ID of the resource group"  
   value       = azurerm_resource_group.first_resource_group.id  
 }  
-
+```
  
 This way, your code is structured more neatly, is easier to maintain, and allows for more flexibility and reusability.  
+
+### Structuring Environment
+
+For a better organization, you can also split your configuration into multiple environments. For example, you can have a development environment and a production environment. This way, you can manage different environments separately and keep your codebase clean and organized.
+
+```
+├── dev  
+│   ├── main.tf  
+│   ├── variables.tf  
+│   ├── outputs.tf  
+├── prod  
+│   ├── main.tf  
+│   ├── variables.tf  
+│   ├── outputs.tf  
+├── variables.tf  
+├── outputs.tf  
+└── providers.tf  
+```
+
+As you can see, each environment has its own main.tf, variables.tf, and outputs.tf files. The root level contains the shared variables and outputs, as well as the provider configuration. This structure allows you to manage different environments separately and keep your codebase clean and organized.
 
 ### Organizing Infrastructure with Terraform Modules  
 
