@@ -14,7 +14,7 @@ This tutorial offers a quick introduction to using Terraform, an open-source Inf
 [1. Overview](#overview)  
 [2. Prerequisites](#prerequisites)  
 [3. First workflow](#first-workflow)  
- [Terraform Modules](#terraform-modules)  
+[4. Structuring Configuration](#)  
  [Terraform Registry](#terraform-registry)  
  [Terraform and Azure Example](#terraform-and-azure-example)  
  [Conclusion](#conclusion)  
@@ -68,9 +68,9 @@ In this tutorial, you will create a Terraform configuration to deploy an Azure r
 Terraform configuration files, written in a declarative language called HCL (HashiCorp Configuration Language), define your desired resources. As a first step, you'll create a simple Terraform workflow, which deploys an Azure resource group using the AzureRM provider:
 
 ```hcl  
-provider "azurerm" {  
+provider "azurerm" {
   features {}
-}  
+}
   
 resource "azurerm_resource_group" "first_resource_group" {  
   name     = "example-resource-group"  
@@ -78,11 +78,25 @@ resource "azurerm_resource_group" "first_resource_group" {
 }  
 ```
 
-### Structuring Configuration
+![](/img/terraform_init.png)
+
+![](/img/terraform_apply.png)
+
+![](/img/terraform_destroy.png)
+
+
+* variable.tf are files where all variables are declared; these might or might not have a default value.
+* variable.tfvars are files where the variables are provided/assigned a value.
+
+
+
+## Structuring Configuration
 
 In previous section you learned how to create and run a simple Terraform workflow, which deploys an Azure resource group. Now, let's discuss how to organize your Terraform environment effectively.  
   
 In order to structure your Terraform configuration you can break it down into multiple files and introduce variables for more flexibility. Here is how you could potentially refactor your environment:
+
+
 
 First, define your provider in a separate file, say providers.tf:
 
@@ -134,13 +148,13 @@ For a better organization, you can also split your configuration into multiple e
 
 ```
 ├── dev  
-│   ├── main.tf  
-│   ├── variables.tf  
-│   ├── outputs.tf  
+│   ├── main.tf  
+│   ├── variables.tf  
+│   ├── outputs.tf  
 ├── prod  
-│   ├── main.tf  
-│   ├── variables.tf  
-│   ├── outputs.tf  
+│   ├── main.tf  
+│   ├── variables.tf  
+│   ├── outputs.tf  
 ├── variables.tf  
 ├── outputs.tf  
 └── providers.tf  
@@ -208,3 +222,9 @@ This section provides a brief overview of Terraform modules, their benefits, and
 - [Getting started with Terraform on Azure Cloud Shell](https://learn.microsoft.com/en-us/azure/developer/terraform/get-started-cloud-shell-bash?tabs=bash)  
 - [Terraform Provider for Azure (Resource Manager)](https://github.com/hashicorp/terraform-provider-azurerm/blob/main/examples/web/static-site/main.tf)
 - https://developer.hashicorp.com/terraform/tutorials/modules/pattern-module-creation
+- https://github.com/cobbler/cobbler/blob/main/docs/user-guide/terraform-provider.rst
+* https://www.pluralsight.com/resources/blog/cloud/the-ultimate-terraform-cheatsheet
+* https://spacelift.io/blog/terraform-environments
+* https://xebia.com/blog/how-to-use-terraform-workspaces-to-manage-environment-based-configuration-2/
+* https://www.hashicorp.com/blog/structuring-hashicorp-terraform-configuration-for-production
+* https://developer.hashicorp.com/terraform/cloud-docs/recommended-practices/part1#one-workspace-per-environment-per-terraform-configuration
