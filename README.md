@@ -88,15 +88,29 @@ resource "azurerm_resource_group" "first_resource_group" {
 * variable.tf are files where all variables are declared; these might or might not have a default value.
 * variable.tfvars are files where the variables are provided/assigned a value.
 
+## Organizing Infrastructure
+
+When working with Terraform, it's crucial to keep your environment organized. This involves managing your configuration files, state files, and modules effectively.  
+  
+- **Configuration Files**: These are the files where you write your infrastructure code. It's a good practice to split your configuration into multiple files for better readability and maintainability.  
+- **State Files**: Terraform creates a state file after applying a configuration. This file helps Terraform track the resources it has created. You should manage your state files carefully and consider using remote state storage for collaboration and security.  
+- **Modules**: Modules are reusable, self-contained packages of Terraform configurations. Organizing your code into modules helps to keep your code DRY (Don't Repeat Yourself), making it more efficient and easier to manage.  
+  
+In Terraform, a module is a container for multiple resources that are used together. Modules allow you to encapsulate a set of resources and operations into a reusable package. This can be used in different parts of your Terraform environment or even shared across multiple configurations.  
+  
+There are several benefits to using modules in Terraform:  
+  
+- **Reusability**: Create a module once and reuse it in multiple places. This reduces code duplication and improves consistency across your infrastructure.  
+- **Organization**: Group related resources into modules to keep your code clean, organized, and easy to understand.  
+- **Abstraction**: Hide the complexity of a set of resources by wrapping them into a module with defined inputs and outputs. This simplifies your configuration and makes it easier to manage.  
+- **Versioning and Source Control**: Track changes over time and release new versions of a module in a controlled manner. Modules can be versioned and stored in a source control system, like Git.  
 
 
-## Structuring Configuration
+### Structuring Configuration Files
 
 In previous section you learned how to create and run a simple Terraform workflow, which deploys an Azure resource group. Now, let's discuss how to organize your Terraform environment effectively.  
   
 In order to structure your Terraform configuration you can break it down into multiple files and introduce variables for more flexibility. Here is how you could potentially refactor your environment:
-
-
 
 First, define your provider in a separate file, say providers.tf:
 
@@ -162,22 +176,7 @@ For a better organization, you can also split your configuration into multiple e
 
 As you can see, each environment has its own main.tf, variables.tf, and outputs.tf files. The root level contains the shared variables and outputs, as well as the provider configuration. This structure allows you to manage different environments separately and keep your codebase clean and organized.
 
-### Organizing Infrastructure with Terraform Modules  
 
-When working with Terraform, it's crucial to keep your environment organized. This involves managing your configuration files, state files, and modules effectively.  
-  
-- **Configuration Files**: These are the files where you write your infrastructure code. It's a good practice to split your configuration into multiple files for better readability and maintainability.  
-- **State Files**: Terraform creates a state file after applying a configuration. This file helps Terraform track the resources it has created. You should manage your state files carefully and consider using remote state storage for collaboration and security.  
-- **Modules**: Modules are reusable, self-contained packages of Terraform configurations. Organizing your code into modules helps to keep your code DRY (Don't Repeat Yourself), making it more efficient and easier to manage.  
-  
-In Terraform, a module is a container for multiple resources that are used together. Modules allow you to encapsulate a set of resources and operations into a reusable package. This can be used in different parts of your Terraform environment or even shared across multiple configurations.  
-  
-There are several benefits to using modules in Terraform:  
-  
-- **Reusability**: Create a module once and reuse it in multiple places. This reduces code duplication and improves consistency across your infrastructure.  
-- **Organization**: Group related resources into modules to keep your code clean, organized, and easy to understand.  
-- **Abstraction**: Hide the complexity of a set of resources by wrapping them into a module with defined inputs and outputs. This simplifies your configuration and makes it easier to manage.  
-- **Versioning and Source Control**: Track changes over time and release new versions of a module in a controlled manner. Modules can be versioned and stored in a source control system, like Git.  
   
 Here's an example of a module that creates an Azure virtual network:  
   
@@ -221,6 +220,8 @@ This section provides a brief overview of Terraform modules, their benefits, and
 - [Terraform Azure Course](https://github.com/in4it/terraform-azure-course/blob/master/for-foreach/instance.tf)  
 - [Getting started with Terraform on Azure Cloud Shell](https://learn.microsoft.com/en-us/azure/developer/terraform/get-started-cloud-shell-bash?tabs=bash)  
 - [Terraform Provider for Azure (Resource Manager)](https://github.com/hashicorp/terraform-provider-azurerm/blob/main/examples/web/static-site/main.tf)
+- [Terraform and Terragrunt guidlines](https://github.com/padok-team/docs-terraform-guidelines/blob/main/README.md)
+- [ARM deployment with Terraform](https://github.com/geekzter/repro-repo/blob/master/terraform/azurerm_resource_group_template_deployment/main.tf)
 - https://developer.hashicorp.com/terraform/tutorials/modules/pattern-module-creation
 - https://github.com/cobbler/cobbler/blob/main/docs/user-guide/terraform-provider.rst
 * https://www.pluralsight.com/resources/blog/cloud/the-ultimate-terraform-cheatsheet
@@ -228,3 +229,9 @@ This section provides a brief overview of Terraform modules, their benefits, and
 * https://xebia.com/blog/how-to-use-terraform-workspaces-to-manage-environment-based-configuration-2/
 * https://www.hashicorp.com/blog/structuring-hashicorp-terraform-configuration-for-production
 * https://developer.hashicorp.com/terraform/cloud-docs/recommended-practices/part1#one-workspace-per-environment-per-terraform-configuration
+* https://developer.hashicorp.com/terraform/language/settings/backends/configuration
+* https://github.com/hashicorp/learn-terraform-state
+* https://developer.hashicorp.com/terraform/language/settings/backends/azurerm
+* https://blog.gruntwork.io/how-to-manage-multiple-environments-with-terraform-32c7bc5d692
+* https://github.com/cloudsecuritylabs/terraform-learning/wiki
+* 
