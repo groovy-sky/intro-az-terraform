@@ -214,6 +214,46 @@ Module use is highly recommended for larger Terraform configurations and collabo
   
 This section provides a brief overview of Terraform modules, their benefits, and how to use them. The included example demonstrates creating a module for an Azure virtual network and how to call this module from a main configuration.
 
+```
+# Add this to your .bashrc file  
+
+# Search for the .terraform/environment file and display the current workspace.
+# Can be overridden by setting the TF_WORKSPACE environment variable.
+tf_workspace() {    
+    if [ -n "$TF_WORKSPACE" ] && [ -d ".terraform" ] && [ -f ".terraform/environment" ]; then  
+        echo -e "[TF_WORKSPACE=\033[32m$TF_WORKSPACE\033[0m]"    
+    elif [ -d ".terraform" ] && [ -f ".terraform/environment" ]; then    
+        echo -e "[\033[32m$(cat .terraform/environment)\033[0m]"    
+    fi    
+}    
+
+# Add the Terraform workspace to Shell prompt 
+export PS1="\u@\h \w \$(tf_workspace)$ "
+
+```
+
+```
+cat << EOF >> ~/.bashrc  
+  
+# Function to get the current Terraform workspace  
+tf_workspace() {  
+    if [ -d ".terraform" ] && [ -f ".terraform/environment" ]; then  
+        echo -e "[\033[32m\$(cat .terraform/environment)\033[0m]"  
+    else  
+        echo ""  
+    fi  
+}  
+  
+# Modify the PS1 variable to include the Terraform workspace  
+export PS1="\u@\h \w \$(tf_workspace)$ "  
+  
+EOF  
+```
+
+```
+ x  
+```
+
 ## Additional Resources  
   
 - [Terraform on Azure](https://developer.hashicorp.com/terraform/tutorials/azure-get-started)  
@@ -234,4 +274,4 @@ This section provides a brief overview of Terraform modules, their benefits, and
 * https://developer.hashicorp.com/terraform/language/settings/backends/azurerm
 * https://blog.gruntwork.io/how-to-manage-multiple-environments-with-terraform-32c7bc5d692
 * https://github.com/cloudsecuritylabs/terraform-learning/wiki
-* 
+* https://support.hashicorp.com/hc/en-us/articles/360043550953-Selecting-a-workspace-when-running-Terraform-in-automation

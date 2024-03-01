@@ -32,7 +32,26 @@ module "vm_nsg" {
   depends_on = [ azurerm_resource_group.rg ]
 }
 
+data "terraform_remote_state" "vnet" {
+  backend = "local"
+  config = {
+    path = "../00-network/terraform.tfstate.d/${[terraform.workspace]}/terraform.tfstate"
+  }
+}
+
 resource "azurerm_resource_group" "rg" {  
   name     = local.vm_rg
   location = var.location
 }  
+
+resource "azurerm_network_interface" "nic" {
+  name                = local.vm_nic
+  location            = var.location
+  resource_group_name = azurerm_resource_group.rg.name
+
+  ip_configuration {
+    name                          = "internal"
+    subnet_id                     = data.terraform_remote_state.vnet.default_subnet_id
+    private_ip_address_allocation = "Dynamic"
+  }
+}
