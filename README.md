@@ -14,22 +14,21 @@ This tutorial offers a quick introduction to using Terraform, an open-source Inf
 [1. Overview](#overview)  
 [2. Prerequisites](#prerequisites)  
 [3. First workflow](#first-workflow)  
-[4. Structuring Configuration](#)  
- [Terraform Registry](#terraform-registry)  
- [Terraform and Azure Example](#terraform-and-azure-example)  
- [Conclusion](#conclusion)  
+[4. Organizing Infrastructure](#)  
+
 
 ## Overview
   
-Terraform, developed by HashiCorp, is an IaC tool that uses a declarative configuration language to define and provision data center infrastructure. It follows a declarative approach to infrastructure management, where you specify your desired infrastructure state, and Terraform figures out how to achieve it.  
-  
-### Terraform Workflow Stages  
-  
-The Terraform workflow includes the following stages:  
-  
-- **Write**: Define resources across multiple cloud providers and services.  
-- **Plan**: Terraform creates an execution plan describing the infrastructure it will create, update, or destroy.  
-- **Apply**: Upon approval, Terraform executes the proposed operations, respecting any resource dependencies.  
+Terraform, developed by HashiCorp, is Infrastructure as Code (IaC) tool that uses a declarative configuration language to define and provision data center infrastructure. It follows a declarative approach to infrastructure management, where you specify your desired infrastructure state, and Terraform figures out how to achieve it.  
+
+The building blocks of Terraform are modules, input variables, local values, and output values. These can be compared to components of a function in a general purpose programming language.
+
+* Modules: In Terraform, a module can be likened to a function. It encapsulates a piece of your infrastructure setup, like a server or a database, for reuse and organization. A module block can be seen as a call to a function.
+Input Variables: Input variables in Terraform are like parameters to a function. You define an input variable and assign it a value inside a module block, similar to passing an argument to a function.
+* Local Values: Local values in Terraform are akin to local variables within a function. They are values that are only visible and accessible within the module in which they are defined, providing a way to simplify complex expressions and group related values.
+* Output Values: Output values are like named return values from a function. They allow you to export information about the resources in a module, so it can be easily accessed by other parts of your configuration or when running Terraform commands.
+
+It's important to note that Terraform is a declarative language. This means that, unlike a function that performs actions, a module in Terraform describes the desired state of infrastructure resources. The actions required to achieve this desired state are determined by Terraform Core using the associated providers.
   
 ### Terraform Components  
   
@@ -58,14 +57,18 @@ To follow this tutorial, you'll need the following:
 
 Before you can start using Terraform with Azure, you need to authenticate with Azure. Terraform supports several methods for authenticating with Azure, including using the Azure CLI, a Service Principal, or Managed Service Identity (MSI). More about that you can find [here](https://learn.microsoft.com/en-us/azure/developer/terraform/authenticate-to-azure). If you are using Azure Cloud Shell, you can use the Azure CLI to authenticate with Azure.
 
+### Terraform Configuration Files
+
+For this tutorial all the Terraform configuration files are stored under [examples](/examples/) folder of [this repository](https://github.com/groovy-sky/lazy-intro-az-terraform). To start use them just clone the repository and navigate to the examples folder.
+
+```bash
+git clone https://github.com/groovy-sky/lazy-intro-az-terraform.git
+cd lazy-intro-az-terraform/examples
+```
   
 ## First workflow
 
-### Initial Configuration
-
-In this tutorial, you will create a Terraform configuration to deploy an Azure resource group. 
-
-Terraform configuration files, written in a declarative language called HCL (HashiCorp Configuration Language), define your desired resources. As a first step, you'll create a simple Terraform workflow, which deploys an Azure resource group using the AzureRM provider:
+Terraform configuration files, written in a declarative language called HCL (HashiCorp Configuration Language), define your desired resources. [First workflow](/examples/workflow-00/main.tf) deploys "example-resource-group" resource group in "West Europe" region using the AzureRM provider:
 
 ```hcl  
 provider "azurerm" {
@@ -78,24 +81,61 @@ resource "azurerm_resource_group" "first_resource_group" {
 }  
 ```
 
+### Initialize the Working Directory
+
+Initialize a working directory containing Terraform configuration file. 
+
+To run this configuration, you need to initialize the working directory, create an execution plan, and apply the changes. Here's how you can do this using the Terraform CLI:
+
+```bash
+terraform init
+```
+
+This command initializes the working directory and downloads the AzureRM provider plugin:
+
 ![](/img/terraform_init.png)
+
+### Create and Apply an Execution Plan
+
+Terraform creates an execution plan describing the infrastructure it will create. After reviewing the plan, you can apply it to create the infrastructure. As first workflow is very simple, let's skip the plan creation and apply the changes directly:
+
+```bash
+terraform apply
+```
 
 ![](/img/terraform_apply.png)
 
+As you can see, before applying the changes, Terraform shows you the execution plan. If you are satisfied with the plan, you can approve it by typing yes. Terraform then applies the changes and creates the resource group.
+
+### Destroy the Infrastructure
+
+To clean up the resources created by Terraform, you can run the destroy command:
+
+```bash
+terraform destroy
+```
+
 ![](/img/terraform_destroy.png)
 
-
-* variable.tf are files where all variables are declared; these might or might not have a default value.
-* variable.tfvars are files where the variables are provided/assigned a value.
 
 ## Organizing Infrastructure
 
 When working with Terraform, it's crucial to keep your environment organized. This involves managing your configuration files, state files, and modules effectively.  
   
-- **Configuration Files**: These are the files where you write your infrastructure code. It's a good practice to split your configuration into multiple files for better readability and maintainability.  
+- **Configuration Files**: These are the files where you write your infrastructure code. It's a good practice to split your configuration into multiple files for better readability and maintainability.  Also you can use variables and outputs to make your configuration more flexible and reusable.
 - **State Files**: Terraform creates a state file after applying a configuration. This file helps Terraform track the resources it has created. You should manage your state files carefully and consider using remote state storage for collaboration and security.  
 - **Modules**: Modules are reusable, self-contained packages of Terraform configurations. Organizing your code into modules helps to keep your code DRY (Don't Repeat Yourself), making it more efficient and easier to manage.  
-  
+
+### Configuration Files
+
+Code in the Terraform language is stored in plain text files with the .tf (and also .tf.json) file extension. These files contain the configuration for your infrastructure, including resources, providers, variables, and outputs.
+
+Terraform normally loads all of the .tf and .tf.json files within a directory and expects each one to define a distinct set of configuration objects. If two files attempt to define the same object, Terraform returns an error.
+
+There is no strict requirement for how to organize your configuration files, but it's a good practice to keep them organized and easy to understand. You can split your configuration into multiple files. 
+
+
+
 In Terraform, a module is a container for multiple resources that are used together. Modules allow you to encapsulate a set of resources and operations into a reusable package. This can be used in different parts of your Terraform environment or even shared across multiple configurations.  
   
 There are several benefits to using modules in Terraform:  
