@@ -1,4 +1,11 @@
-resource "azurerm_resource_group" "first_resource_group" {    
-  name     = var.resource_group_name   
-  location = var.location   
-}   
+resource "random_pet" "stroage_name" {
+  length = 3
+  separator = ""
+}
+
+
+module "storage_deploy" {
+    source = "../workflow-01"
+    storage_account_name = substr(random_pet.stroage_name.id,0,20)
+    resource_group_name = "random-pet-rg"
+}
