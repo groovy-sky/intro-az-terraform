@@ -120,19 +120,25 @@ terraform destroy
 
 ## Organizing Infrastructure
 
-When working with Terraform, it's crucial to keep your environment organized. This involves managing your configuration files, state files, and modules effectively.  
-  
+When working with Terraform, it's crucial to keep your environment organized. There are several best practices for organizing your Terraform configuration to make it more maintainable and scalable, such as:
+
+- ** Input and Output Variables**: Use input and output variables to make your configuration more flexible and reusable. Input variables allow you to pass parameters to your configuration, while output variables allow you to export information about the resources you create.
 - **Configuration Files**: These are the files where you write your infrastructure code. It's a good practice to split your configuration into multiple files for better readability and maintainability.  Also you can use variables and outputs to make your configuration more flexible and reusable.
 - **State Files**: Terraform creates a state file after applying a configuration. This file helps Terraform track the resources it has created. You should manage your state files carefully and consider using remote state storage for collaboration and security.  
 - **Modules**: Modules are reusable, self-contained packages of Terraform configurations. Organizing your code into modules helps to keep your code DRY (Don't Repeat Yourself), making it more efficient and easier to manage.  
 
-### Configuration Files
+## Inputs, outputs, variables and modules
+
+
+
+## File Structure and Organization
 
 Code in the Terraform language is stored in plain text files with the .tf (and also .tf.json) file extension. These files contain the configuration for your infrastructure, including resources, providers, variables, and outputs.
 
 Terraform normally loads all of the .tf and .tf.json files within a directory and expects each one to define a distinct set of configuration objects. If two files attempt to define the same object, Terraform returns an error.
 
 There is no strict requirement for how to organize your configuration files, but it's a good practice to keep them organized and easy to understand. You can split your configuration into multiple files. 
+
 
 
 
