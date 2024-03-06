@@ -5,6 +5,9 @@ provider "azurerm" {
 provider "random"{
 }
 
+provider "http" {
+}
+
 locals {
   location = "West Europe"
   prefix = "deployment-02"
@@ -62,5 +65,12 @@ resource "azurerm_resource_group_template_deployment" "arm_vm" {
         value = data.terraform_remote_state.vnet.outputs.subnet_id
       }
 })
-
 }
+
+data "http" "vm_http_check"{
+    url = "http://${jsondecode(azurerm_resource_group_template_deployment.arm_vm.output_content).public_ip.value}"
+}
+
+output "http_response" {  
+  value = data.http.vm_http_check.body  
+}  
