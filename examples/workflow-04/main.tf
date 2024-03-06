@@ -7,7 +7,8 @@ locals {
     "environment": terraform.workspace
     }
   )
-  vnet_rg = "${var.vnet_name[terraform.workspace]}-rg"
+  vnet_name = "${var.terraform.workspace}-vnet"
+  vnet_rg = "${local.vnet_name}-rg"
 }
 
 resource "azurerm_resource_group" "rg" {  
@@ -16,7 +17,7 @@ resource "azurerm_resource_group" "rg" {
 }  
   
 resource "azurerm_virtual_network" "vnet" {  
-  name                = var.vnet_name[terraform.workspace]
+  name                = local.vnet_name
   location            = azurerm_resource_group.rg.location  
   resource_group_name = azurerm_resource_group.rg.name  
   address_space       = [var.vnet_address_space[terraform.workspace]]

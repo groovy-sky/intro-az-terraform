@@ -2,7 +2,8 @@ provider "azurerm" {
   features {}  
 }
 
+
 resource "azurerm_resource_group" "example" {  
-  name     = "example-resource-group" 
+  name     = "workflow-00-rg"
   location = "West Europe" 
 }  

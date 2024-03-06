@@ -4,10 +4,6 @@ variable "location" {
   default     = "West Europe"  
 }  
 
-variable "vnet_name" {  
-  type        = map(string)
-}
-
 variable "vnet_address_space" {  
   type        = map(string)  
 }

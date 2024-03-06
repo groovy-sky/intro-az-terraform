@@ -1,0 +1,29 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2018-05-01/subscriptionDeploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+      "prefix": {
+        "type": "string"
+      },
+      "rgLocation": {
+        "type": "string",
+        "defaultValue": "[deployment().location]"
+      }
+    },
+    "variables": {
+      "rgName": "[concat(parameters('prefix'),'-rg')]"},
+    "resources": [
+      {
+        "type": "Microsoft.Resources/resourceGroups",
+        "apiVersion": "2022-09-01",
+        "name": "[variables('rgName')]",
+        "location": "[parameters('rgLocation')]"
+      }
+    ],
+    "outputs": {
+      "rgName": {
+        "type": "string",
+        "value": "[variables('rgName')]"
+      }
+    }  
+}

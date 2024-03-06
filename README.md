@@ -278,27 +278,6 @@ export PS1="\u@\h \w \$(tf_workspace)$ "
 
 ```
 
-```
-cat << EOF >> ~/.bashrc  
-  
-# Function to get the current Terraform workspace  
-tf_workspace() {  
-    if [ -d ".terraform" ] && [ -f ".terraform/environment" ]; then  
-        echo -e "[\033[32m\$(cat .terraform/environment)\033[0m]"  
-    else  
-        echo ""  
-    fi  
-}  
-  
-# Modify the PS1 variable to include the Terraform workspace  
-export PS1="\u@\h \w \$(tf_workspace)$ "  
-  
-EOF  
-```
-
-```
- x  
-```
 
 ## Additional Resources  
   
@@ -309,15 +288,13 @@ EOF
 - [Terraform and Terragrunt guidlines](https://github.com/padok-team/docs-terraform-guidelines/blob/main/README.md)
 - [ARM deployment with Terraform](https://github.com/geekzter/repro-repo/blob/master/terraform/azurerm_resource_group_template_deployment/main.tf)
 - https://developer.hashicorp.com/terraform/tutorials/modules/pattern-module-creation
-- https://github.com/cobbler/cobbler/blob/main/docs/user-guide/terraform-provider.rst
 * https://www.pluralsight.com/resources/blog/cloud/the-ultimate-terraform-cheatsheet
 * https://spacelift.io/blog/terraform-environments
-* https://xebia.com/blog/how-to-use-terraform-workspaces-to-manage-environment-based-configuration-2/
 * https://www.hashicorp.com/blog/structuring-hashicorp-terraform-configuration-for-production
 * https://developer.hashicorp.com/terraform/cloud-docs/recommended-practices/part1#one-workspace-per-environment-per-terraform-configuration
 * https://developer.hashicorp.com/terraform/language/settings/backends/configuration
 * https://github.com/hashicorp/learn-terraform-state
 * https://developer.hashicorp.com/terraform/language/settings/backends/azurerm
-* https://blog.gruntwork.io/how-to-manage-multiple-environments-with-terraform-32c7bc5d692
 * https://github.com/cloudsecuritylabs/terraform-learning/wiki
 * https://support.hashicorp.com/hc/en-us/articles/360043550953-Selecting-a-workspace-when-running-Terraform-in-automation
+* https://github.com/hashicorp/terraform-provider-azurerm/blob/main/examples/virtual-networks/network-security-group/main.tf
