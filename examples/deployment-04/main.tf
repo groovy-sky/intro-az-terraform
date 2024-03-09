@@ -2,13 +2,28 @@ provider "azurerm" {
   features {}  
 }  
 
+variable "location" {  
+  description = "The location where all resources should be created"  
+  type        = string  
+  default     = "West Europe"  
+}  
+
+variable "vnet_address_space" {  
+  type        = map(string)  
+}
+
+variable "vnet_subnet_name" {  
+  type        = string
+  default = "default"
+}
+
 locals {
   tags =  tomap({
     "environment": terraform.workspace
     }
   )
-  vnet_name = "${var.terraform.workspace}-vnet"
-  vnet_rg = "${local.vnet_name}-rg"
+  environment = terraform.workspace
+  vnet_rg = "deployment-04-${terraform.workspace}-rg"
 }
 
 resource "azurerm_resource_group" "rg" {  
@@ -17,13 +32,13 @@ resource "azurerm_resource_group" "rg" {
 }  
   
 resource "azurerm_virtual_network" "vnet" {  
-  name                = local.vnet_name
+  name                = "${local.environment}-vnet"
   location            = azurerm_resource_group.rg.location  
   resource_group_name = azurerm_resource_group.rg.name  
-  address_space       = [var.vnet_address_space[terraform.workspace]]
+  address_space       = [var.vnet_address_space[local.environment]]
   subnet{
     name                 = var.vnet_subnet_name
-    address_prefix       = var.vnet_address_space[terraform.workspace]
+    address_prefix       = var.vnet_address_space[local.environment]
   }
   tags = local.tags
 }  
