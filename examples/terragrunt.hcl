@@ -1,7 +1,7 @@
 remote_state {  
   generate = {
   path      = "backend.tf"
-  if_exists = "overwrite"
+  if_exists = "skip"
   }
   backend = "azurerm" 
   config = {  

@@ -1,12 +1,6 @@
-provider "azurerm" {  
+provider "azurerm" {    
   features {}  
-}  
-
-variable "location" {  
-  description = "The location where all resources should be created"  
-  type        = string  
-  default     = "West Europe"  
-}  
+}
 
 variable "vnet_address_space" {  
   type        = map(string)  
@@ -24,11 +18,12 @@ locals {
   )
   environment = terraform.workspace
   vnet_rg = "deployment-04-${terraform.workspace}-rg"
+  location = "West Europe"
 }
 
 resource "azurerm_resource_group" "rg" {  
   name     = local.vnet_rg
-  location = var.location
+  location = local.location
 }  
   
 resource "azurerm_virtual_network" "vnet" {  
