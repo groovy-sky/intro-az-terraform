@@ -27,5 +27,5 @@ override.tf.json
 terraform.rc
 
 # Terragrunt files
-terragrunt.hcl
+root.hcl
 backend.tf

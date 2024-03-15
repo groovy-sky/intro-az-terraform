@@ -1,6 +1,3 @@
-provider "azurerm" {    
-  features {}  
-} 
 
 locals {
   default_location = "West Europe"

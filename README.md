@@ -202,6 +202,40 @@ output "resource_group_id" {
  
 This way, your code is structured more neatly, is easier to maintain, and allows for more flexibility and reusability.  
 
+### To-DO
+
+```
+# root/terragrunt.hcl  
+remote_state {  
+  backend = "azurerm"  
+  config = {  
+    resource_group_name  = "myresourcegroup"  
+    storage_account_name = "mystorageaccount"  
+  }  
+  generate = {  
+    path      = "backend.tf"  
+    if_exists = "overwrite_terragrunt"  
+  }  
+}  
+
+```
+
+```
+# deployment-01/terragrunt.hcl  
+include {  
+  path = find_in_parent_folders()  
+}  
+  
+remote_state {  
+  backend = "azurerm"  
+  config = {  
+    container_name = "${path_relative_to_include()}"  
+    key            = "terraform.tfstate"  
+  }  
+}  
+
+```
+
 ### Structuring Environment
 
 For a better organization, you can also split your configuration into multiple environments. For example, you can have a development environment and a production environment. This way, you can manage different environments separately and keep your codebase clean and organized.
@@ -298,3 +332,4 @@ export PS1="\u@\h \w \$(tf_workspace)$ "
 * https://github.com/cloudsecuritylabs/terraform-learning/wiki
 * https://support.hashicorp.com/hc/en-us/articles/360043550953-Selecting-a-workspace-when-running-Terraform-in-automation
 * https://github.com/hashicorp/terraform-provider-azurerm/blob/main/examples/virtual-networks/network-security-group/main.tf
+* [A 'state-scalable' project factory pattern with Terragrunt](https://github.com/GoogleCloudPlatform/professional-services/tree/main/examples/terragrunt-project-factory-gcp)
