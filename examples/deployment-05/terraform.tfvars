@@ -1,4 +1,4 @@
-vnet_address_space = {
-    "prod": "192.168.0.0/24",
-    "dev": "10.0.0.0/24"
+vm_size = {
+    "prod": "Standard_DS1_v2",
+    "dev": "Standard_b1s"
 }

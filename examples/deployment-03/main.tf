@@ -28,13 +28,10 @@ locals {
 resource "azurerm_resource_group_template_deployment" "arm-storage-deploy" {
   name                = "arm-storage-deploy"
   resource_group_name = var.resource_group_name
-
   template_content = file("template.json")
   deployment_mode = "Incremental"
   depends_on = [ azurerm_resource_group.state_rg ]
 }
-
-
   
 data "azurerm_storage_account" "sa" {    
   name                = jsondecode(azurerm_resource_group_template_deployment.arm-storage-deploy.output_content)["storageName"]["value"]  

@@ -18,7 +18,12 @@ remote_state {
     container_name = "\${path_relative_to_include()}"  
     key            = "terraform.tfstate"  
   }  
-}  
+} 
+EOF
+
+cat > ../global_vars.yaml << EOF  
+remote_state_account: "${STORAGE_ACCOUNT_NAME}" 
+remote_state_key: "terraform.tfstate" 
 EOF
 
 content=$(<terragrunt.hcl)  

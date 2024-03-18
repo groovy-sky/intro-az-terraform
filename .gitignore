@@ -26,6 +26,8 @@ override.tf.json
 .terraformrc
 terraform.rc
 
-# Terragrunt files
+# Project-specific ignore files
 root.hcl
+terragrunt.hcl
 backend.tf
+global_vars.yaml
