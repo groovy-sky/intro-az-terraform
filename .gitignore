@@ -31,3 +31,4 @@ root.hcl
 terragrunt.hcl
 backend.tf
 global_vars.yaml
+.terraform.lock.hcl
