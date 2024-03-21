@@ -1,16 +1,6 @@
-provider "azurerm" {    
-  features {}  
-}
-locals {
-  prefix = "deployment-01"
-}
 
-variable "vnet" {
-  type = map(string)
-  default = {
-    address_space = "10.0.1.0/24"
-    subnet_name = "default"
-  }
+locals {
+  prefix = basename(abspath(path.module))
 }
 
 module "deployment-00" {
