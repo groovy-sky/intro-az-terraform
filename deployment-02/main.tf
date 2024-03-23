@@ -72,5 +72,5 @@ data "http" "vm_http_check"{
 }
 
 output "http_response" {  
-  value = data.http.vm_http_check.body  
+  value = data.http.vm_http_check.response_body  
 }  
