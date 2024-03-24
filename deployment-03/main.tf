@@ -3,7 +3,7 @@ provider "azurerm" {
 }
 
 locals {
-  rg_name = "{basename(abspath(path.module))-rg"
+  rg_name = "{basename(abspath(path.module))}-rg"
 }
   
 variable "location" {  
