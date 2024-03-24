@@ -7,6 +7,10 @@ variable "resource_group_name" {
   type        = string  
   default     = "${basename(abspath(path.module))}"
 }  
+
+locals {
+  rg_name = "{basename(abspath(path.module))-rg"
+}
   
 variable "location" {  
   description = "The location of the resource group"  
@@ -16,7 +20,7 @@ variable "location" {
 
 // Create a resource group
 resource "azurerm_resource_group" "state_rg" {    
-  name     = var.resource_group_name   
+  name     = local.rg_name
   location = var.location   
 }   
 
