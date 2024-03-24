@@ -5,7 +5,7 @@ provider "azurerm" {
 variable "resource_group_name" {  
   description = "The name of the resource group"  
   type        = string  
-  default     = basename(abspath(path.module))
+  default     = "${basename(abspath(path.module))}"
 }  
   
 variable "location" {  
