@@ -2,12 +2,6 @@ provider "azurerm" {
   features {}  
 }
 
-variable "resource_group_name" {  
-  description = "The name of the resource group"  
-  type        = string  
-  default     = "${basename(abspath(path.module))}"
-}  
-
 locals {
   rg_name = "{basename(abspath(path.module))-rg"
 }
@@ -28,7 +22,7 @@ resource "azurerm_resource_group" "state_rg" {
 based on tenant ID and subscription ID */
 resource "azurerm_resource_group_template_deployment" "arm-storage-deploy" {
   name                = "arm-storage-deploy"
-  resource_group_name = var.resource_group_name
+  resource_group_name = azurerm_resource_group.state_rg.name
   template_content = file("template.json")
   deployment_mode = "Incremental"
   depends_on = [ azurerm_resource_group.state_rg ]
