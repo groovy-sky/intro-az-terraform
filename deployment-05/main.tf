@@ -28,14 +28,16 @@ locals {
     }
   )
   prefix = "${basename(abspath(path.module))}-${terraform.workspace}"
-  global_vars = yamldecode(file("../global_vars.yaml"))
+  global_vars = yamldecode(file("../global_vars.yaml")) // Load global_vars.yaml file
 }
 
+// Create a resource group
 resource "azurerm_resource_group" "rg" {  
   name     = "${local.prefix}-rg"
   location = var.location
 }  
 
+// Obtain the default subnet ID from the remote state in current workspace
 data "terraform_remote_state" "deployment-04" {  
   backend = "azurerm"  
   config = {  
@@ -45,6 +47,7 @@ data "terraform_remote_state" "deployment-04" {
   }  
 }
 
+// Create a network interface
 resource "azurerm_network_interface" "nic" {
   name                = "${local.prefix}-nic"
   location            = azurerm_resource_group.rg.location
@@ -58,6 +61,7 @@ resource "azurerm_network_interface" "nic" {
   tags = local.tags
 }
 
+// Create a virtual machine
 resource "azurerm_virtual_machine" "vm" {
   name                  = "${local.prefix}-vm"
   location              = azurerm_resource_group.rg.location

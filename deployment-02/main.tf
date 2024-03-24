@@ -10,15 +10,17 @@ provider "http" {
 
 locals {
   location = "West Europe"
-  prefix = "deployment-02"
+  prefix = basename(abspath(path.module))
 }
 
+// Generate a random password for the VM
 resource "random_password" "vm_pass" {
   length           = 60
   special          = true
   override_special = "!#$%&*()-_=+[]{}<>:?"
 }
 
+// Obtain state from the deployment-01 module
 data "terraform_remote_state" "vnet" {  
   backend = "local"  
   config = {  
@@ -26,6 +28,10 @@ data "terraform_remote_state" "vnet" {
   }  
 } 
 
+/*
+Create a resource group using an ARM template.
+Input parameters are passed to the ARM template in JSON format by encoding the parameters using the jsonencode function.
+*/
 resource "azurerm_subscription_template_deployment" "arm_rg" {
   name             = "${local.prefix}-rg"
   location         = local.location
@@ -40,6 +46,7 @@ resource "azurerm_subscription_template_deployment" "arm_rg" {
   template_content = file("rg.json")
 }
 
+// Create a VM from vm.json ARM template
 resource "azurerm_resource_group_template_deployment" "arm_vm" {
     name                = "${local.prefix}-vm"
     deployment_mode     = "Incremental"
@@ -67,10 +74,14 @@ resource "azurerm_resource_group_template_deployment" "arm_vm" {
 })
 }
 
+/* After VM is created, check that NGINX was installed and configured using an HTTP check.
+The URL for the check is the public IP address of the VM, which is allowed by NSG for port 80.
+*/
 data "http" "vm_http_check"{
     url = "http://${jsondecode(azurerm_resource_group_template_deployment.arm_vm.output_content).public_ip.value}"
 }
 
+// Output the HTTP response
 output "http_response" {  
   value = data.http.vm_http_check.response_body  
 }  

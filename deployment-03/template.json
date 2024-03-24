@@ -180,10 +180,6 @@
         "storageName": {
             "type": "string",
             "value": "[parameters('storageAccountName')]"
-        },
-        "containerName": {
-            "type": "string",
-            "value": "[parameters('storageBlobContainerName')]"
         }
     }
 }
